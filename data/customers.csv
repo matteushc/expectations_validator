@@ -1,0 +1,5 @@
+customer_id,email,age,country,signup_date,score,period_type
+1,ana@example.com,32,BR,2026-01-15,0.1,reference
+2,john@example.com,41,US,2026-02-20,0.5,current
+3,maria@example.pt,27,PT,2026-03-08,0.7,current
+

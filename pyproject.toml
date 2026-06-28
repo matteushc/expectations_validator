@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "df-expectations-validator"
+version = "0.1.0"
+description = "Validate pandas or Spark DataFrames with Great Expectations rules defined in YAML."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "great_expectations>=1.18.1,<2",
+    "pandas>=2.0",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+spark = ["pyspark>=3.5,<4"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+df-expectations-validator = "df_expectations_validator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,50 @@
+name: customer_quality_suite
+meta:
+  result_format: SUMMARY
+expectations:
+  - type: "expect_table_columns_to_match_set"
+    kwargs:
+      column_set:
+        - customer_id
+        - email
+        - age
+        - country
+        - signup_date
+      exact_match: true
+
+  - type: "expect_column_values_to_not_be_null"
+    kwargs:
+      column: customer_id
+
+  - type: "expect_column_values_to_not_be_null"
+    kwargs:
+      column: email
+
+  - type: "expect_column_values_to_match_regex"
+    kwargs:
+      column: email
+      regex: "^[^@]+@[^@]+\\.[^@]+$"
+
+  - type: "expect_column_values_to_be_between"
+    kwargs:
+      column: age
+      min_value: 18
+      max_value: 100
+
+  - type: "expect_column_values_to_be_in_set"
+    kwargs:
+      column: country
+      value_set:
+        - BR
+        - US
+        - PT
+
+  - type: "expect_batch_calculate_psi"
+    kwargs:
+      column: "score"
+      bins: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+      column_type: "period_type"
+      baseline_pct: "reference"
+      current_pct: "current"
+    meta: {}
+

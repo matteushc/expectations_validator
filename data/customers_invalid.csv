@@ -1,0 +1,5 @@
+customer_id,email,age,country,signup_date,socre,period_type
+1,ana@example.com,32,BR,2026-01-15,0.5,reference
+,missing-id@example.com,29,BR,2026-02-01,0.3,current
+3,not-an-email,17,AR,2026-03-08,0.4,reference
+
