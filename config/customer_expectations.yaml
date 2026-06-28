@@ -10,6 +10,8 @@ expectations:
         - age
         - country
         - signup_date
+        - score
+        - period_type
       exact_match: true
 
   - type: "expect_column_values_to_not_be_null"

@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import pkgutil
 from typing import Any, Literal
 from uuid import uuid4
 
+import inspect
 import great_expectations as gx
 
 from df_expectations_validator.config import load_suite_config
+from df_expectations_validator import expectations
 
 Engine = Literal["pandas", "spark"]
 
@@ -109,8 +112,26 @@ def _build_batch(dataframe: Any, engine: Engine):
     return batch_definition.get_batch(batch_parameters={"dataframe": dataframe})
 
 
+def _normalize_expectation_type(expectation_type: str) -> str:
+    if expectation_type.startswith("expect_"):
+        return "".join(part.capitalize() for part in expectation_type.split("_"))
+    return expectation_type
+
+
 def _create_expectation(expectation_type: str, kwargs: dict[str, Any]):
-    expectation_class = getattr(gx.expectations, expectation_type, None)
+    _normalized_expectation_type = _normalize_expectation_type(expectation_type)
+    
+    try:
+        expectation_class = getattr(gx.expectations, _normalized_expectation_type)
+    except (AttributeError, ValueError):
+        
+        for _, modname, _ in pkgutil.iter_modules(expectations.__path__):
+            module = __import__(f"df_expectations_validator.expectations.{modname}", fromlist=[modname])
+            for name, obj in inspect.getmembers(module):
+                if name == _normalized_expectation_type:
+                    expectation_class = obj
+                    break
+
     if expectation_class is None:
         raise ValueError(
             f"Unknown expectation type '{expectation_type}'. "
